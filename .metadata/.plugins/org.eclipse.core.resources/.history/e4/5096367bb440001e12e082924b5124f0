@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Age: " + age;
+    }
+}
+
+class Student extends Person {
+    private int studentId;
+
+    public Student(String name, int age, int studentId) {
+        super(name, age);
+        this.studentId = studentId;
+    }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Student ID: " + studentId;
+    }
+}
+
+class Teacher extends Person {
+    private String teacherId;
+
+    public Teacher(String name, int age, String teacherId) {
+        super(name, age);
+        this.teacherId = teacherId;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Teacher ID: " + teacherId;
+    }
+}
+
+class Course {
+    private String courseName;
+    private Teacher teacher;
+    private List<Student> enrolledStudents;
+
+    public Course(String courseName, Teacher teacher) {
+        this.courseName = courseName;
+        this.teacher = teacher;
+        this.enrolledStudents = new ArrayList<>();
+    }
+
+    public void enrollStudent(Student student) {
+        enrolledStudents.add(student);
+    }
+
+    public void printCourseInfo() {
+        System.out.println("Course: " + courseName);
+        System.out.println("Teacher: " + teacher.getName());
+        System.out.println("Enrolled Students:");
+        for (Student student : enrolledStudents) {
+            System.out.println("- " + student.getName());
+        }
+    }
+}
+
+public class SchoolSystem {
+    public static void main(String[] args) {
+        Student student1 = new Student("Alice", 15, 1001);
+        Student student2 = new Student("Bob", 16, 1002);
+
+        Teacher teacher1 = new Teacher("Ms. Smith", 35, "T101");
+
+        Course mathCourse = new Course("Mathematics", teacher1);
+        mathCourse.enrollStudent(student1);
+        mathCourse.enrollStudent(student2);
+
+        System.out.println("Course Information:");
+        mathCourse.printCourseInfo();
+    }
+}

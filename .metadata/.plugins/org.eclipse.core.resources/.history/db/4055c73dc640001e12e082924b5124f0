@@ -1,0 +1,42 @@
+import java.util.Random;
+import java.util.Scanner;
+
+class CricketGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.println("Welcome to Simple Cricket Game!");
+
+        int runsRequired = 50;  // The target score to win
+        int totalRunsScored = 0;
+        int overs = 5;  // Total overs
+
+        System.out.println("You need " + runsRequired + " runs to win in " + overs + " overs.");
+
+        for (int over = 1; over <= overs; over++) {
+            System.out.println("\nOver " + over + " begins...");
+
+            for (int ball = 1; ball <= 6; ball++) {
+                System.out.print("Press Enter to bowl...");
+                scanner.nextLine();
+
+                int randomRun = random.nextInt(7);  // Generate a random run between 0 and 6
+                totalRunsScored += randomRun;
+
+                System.out.println("You scored " + randomRun + " runs in this ball.");
+
+                if (totalRunsScored >= runsRequired) {
+                    System.out.println("Congratulations! You won by " + (totalRunsScored - runsRequired) + " runs.");
+                    return;
+                }
+            }
+
+            System.out.println("Over " + over + " ends. You need " + (runsRequired - totalRunsScored) + " runs to win.");
+        }
+
+        if (totalRunsScored < runsRequired) {
+            System.out.println("You lost by " + (runsRequired - totalRunsScored) + " runs.");
+        }
+    }
+}

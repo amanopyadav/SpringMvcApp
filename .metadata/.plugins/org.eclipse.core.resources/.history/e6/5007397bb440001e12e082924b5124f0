@@ -1,0 +1,60 @@
+import java.awt.Color;
+
+import javax.swing.Box;
+import javax.swing.GroupLayout.Group;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
+
+public class Building3D extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        Group root = new Group();
+        Scene scene = new Scene(root, 800, 600, Color.BLACK);
+
+        // Create building structure (a box)
+        Box building = new Box(200, 300, 100);
+        building.setTranslateX(scene.getWidth() / 2);
+        building.setTranslateY(scene.getHeight() / 2);
+        building.setTranslateZ(50);
+        building.setMaterial(new javafx.scene.paint.PhongMaterial(Color.GRAY));
+
+        // Add building to the scene
+        root.getChildren().add(building);
+
+        // Apply rotation animation
+        Rotate rotateX = new Rotate(0, Rotate.X_AXIS);
+        Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
+        building.getTransforms().addAll(rotateX, rotateY);
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case UP:
+                    rotateX.setAngle(rotateX.getAngle() + 10);
+                    break;
+                case DOWN:
+                    rotateX.setAngle(rotateX.getAngle() - 10);
+                    break;
+                case LEFT:
+                    rotateY.setAngle(rotateY.getAngle() + 10);
+                    break;
+                case RIGHT:
+                    rotateY.setAngle(rotateY.getAngle() - 10);
+                    break;
+            }
+        });
+
+        primaryStage.setTitle("3D Building Example");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+}

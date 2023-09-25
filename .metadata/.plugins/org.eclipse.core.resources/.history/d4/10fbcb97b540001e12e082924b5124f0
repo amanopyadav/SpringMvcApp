@@ -1,0 +1,136 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class SnakeGame extends JPanel implements KeyListener, ActionListener {
+    private int[] snakeX;
+    private int[] snakeY;
+    private int snakeLength;
+
+    private boolean leftDirection = false;
+    private boolean rightDirection = true;
+    private boolean upDirection = false;
+    private boolean downDirection = false;
+
+    private int blockSize = 25;
+    private int numBlocks = 20;
+
+    private int appleX;
+    private int appleY;
+
+    private Timer timer;
+
+    public SnakeGame() {
+        snakeX = new int[numBlocks * numBlocks];
+        snakeY = new int[numBlocks * numBlocks];
+
+        snakeLength = 3;  // Initial snake length
+
+        // Initialize snake's head position
+        snakeX[0] = numBlocks / 2 * blockSize;
+        snakeY[0] = numBlocks / 2 * blockSize;
+
+        // Initialize apple's position
+        spawnApple();
+
+        timer = new Timer(100, this);
+        timer.start();
+
+        addKeyListener(this);
+        setFocusable(true);
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Draw the snake
+        for (int i = 0; i < snakeLength; i++) {
+            g.setColor(Color.GREEN);
+            g.fillRect(snakeX[i], snakeY[i], blockSize, blockSize);
+        }
+
+        // Draw the apple
+        g.setColor(Color.RED);
+        g.fillRect(appleX, appleY, blockSize, blockSize);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (leftDirection) move(-blockSize, 0);
+        if (rightDirection) move(blockSize, 0);
+        if (upDirection) move(0, -blockSize);
+        if (downDirection) move(0, blockSize);
+
+        // Check for collisions
+        if (snakeX[0] == appleX && snakeY[0] == appleY) {
+            snakeLength++;
+            spawnApple();
+        }
+
+        repaint();
+    }
+
+    public void move(int dx, int dy) {
+        for (int i = snakeLength - 1; i > 0; i--) {
+            snakeX[i] = snakeX[i - 1];
+            snakeY[i] = snakeY[i - 1];
+        }
+
+        snakeX[0] += dx;
+        snakeY[0] += dy;
+
+        checkCollisions();
+    }
+
+    public void checkCollisions() {
+        // Check if snake hits walls or itself
+        // Implement collision detection logic here
+    }
+
+    public void spawnApple() {
+        appleX = (int) (Math.random() * numBlocks) * blockSize;
+        appleY = (int) (Math.random() * numBlocks) * blockSize;
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
+            leftDirection = true;
+            upDirection = false;
+            downDirection = false;
+        }
+
+        if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
+            rightDirection = true;
+            upDirection = false;
+            downDirection = false;
+        }
+
+        if ((key == KeyEvent.VK_UP) && (!downDirection)) {
+            upDirection = true;
+            rightDirection = false;
+            leftDirection = false;
+        }
+
+        if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
+            downDirection = true;
+            rightDirection = false;
+            leftDirection = false;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {}
+
+    public void keyTyped(KeyEvent e) {}
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Snake Game");
+        SnakeGame snakeGame = new SnakeGame();
+
+        frame.add(snakeGame);
+        frame.setSize(snakeGame.numBlocks * snakeGame.blockSize, snakeGame.numBlocks * snakeGame.blockSize);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
+
